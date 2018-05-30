@@ -363,7 +363,7 @@ double evaluate_postfix(struct token_queue* pqueue_postfix)
             for (int i = operands_num - 1; i >= 0; --i) {
                 operands[i] = pop(&operand_stack);
                 if (operands[i] == NULL) {
-                    printf("invalid expression");
+                    printf("invalid expression\n");
                     abort();
                 }
             }
@@ -398,7 +398,7 @@ double evaluate_postfix(struct token_queue* pqueue_postfix)
             }
         } else {
             /* parenttheses should not appears in postfix queue */
-            printf("invalid expression");
+            printf("invalid expressio\n");
             abort();
         }
     }
@@ -407,7 +407,7 @@ double evaluate_postfix(struct token_queue* pqueue_postfix)
     p_expr_token final_result = pop(&operand_stack);
     p_expr_token flag = pop(&operand_stack);
     if (final_result == NULL || flag != NULL) {
-        printf("invalid expression");
+        printf("invalid expression\n");
         abort();
     }
     return final_result->value.operand;
