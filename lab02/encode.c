@@ -99,10 +99,12 @@ struct tnode* pq_pop()
 {
     struct tnode* p = NULL;
     /*write code to remove front of the queue*/
-    p = qhead;
-    qhead = qhead->next;
-    p->next = NULL;
-    printf("popped:%c,%f\n", p->symbol, p->freq);
+    if (qhead) {
+        p = qhead;
+        qhead = qhead->next;
+        p->next = NULL;
+        printf("popped:%c,%f\n", p->symbol, p->freq);
+    }
     return p;
 }
 
@@ -121,9 +123,17 @@ void generate_code(struct tnode* root, int depth)
         /*start backwards*/
         code[symbol][len] = 0;
         /*
-			TODO: follow parent pointer to the top
+			follow parent pointer to the top
 			to generate the code string
 		*/
+        for (; len > 0; --len) {
+            if (root == root->parent->left) {
+                code[symbol][len - 1] = '0';
+            } else if (root == root->parent->right) {
+                code[symbol][len - 1] = '1';
+            }
+            root = root->parent;
+        }
         printf("built code:%c,%s\n", symbol, code[symbol]);
     } else {
         generate_code(root->left, depth + 1);
@@ -154,6 +164,19 @@ void encode(char* str, FILE* fout)
         fprintf(fout, "%s", code[*str]);
         str++;
     }
+}
+/*
+	@function freetree
+	@desc	  cleans up resources for tree
+*/
+
+void freetree(struct tnode* root)
+{
+    if (root == NULL)
+        return;
+    freetree(root->right);
+    freetree(root->left);
+    free(root);
 }
 /*
     @function main
@@ -221,6 +244,8 @@ int main()
     encode("abba cafe bad", fout);
     fclose(fout);
     getchar();
-    /*TODO: clear resources*/
+    /*clear resources*/
+    freetree(root);
+
     return 0;
 }
