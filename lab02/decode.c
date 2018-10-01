@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_SYMBOLS 255
-#define MAX_LEN 10
+#define MAX_SYMBOLS 256
+#define MAX_LEN 256
 
 struct tnode {
     struct tnode* left;  /*used when in tree*/
